@@ -7,7 +7,8 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class TransactionUtils {
-    public TransactionDirection getDirection(final TransactionType type) {
+
+    public static TransactionDirection getDirection(final TransactionType type) {
         return switch (type) {
             case DEPOSIT -> TransactionDirection.CREDIT;
             default -> TransactionDirection.DEBIT;

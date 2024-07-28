@@ -1,5 +1,7 @@
 package com.exercise.ledger.core.transaction;
 
+import java.util.UUID;
+
 import com.exercise.ledger.core.account.CurrencyType;
 import com.exercise.ledger.core.customer.Customer;
 
@@ -28,21 +30,32 @@ import lombok.ToString;
 @ToString
 @Builder
 public class Transaction {
+
     @Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-    @Column(name="customer_id", updatable=false, insertable=false)
-    private Long customerId;
-    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, 
-        CascadeType.DETACH,  CascadeType.REFRESH})
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(name = "customer_id", updatable = false, insertable = false)
+    private UUID customerId;
+
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH })
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     @ToString.Exclude
     private Customer customer;
-    private Long withCustomerId;
+
+    private UUID withCustomerId;
+
     @Enumerated(EnumType.STRING)
     private TransactionType type;
+
     @Enumerated(EnumType.STRING)
     private TransactionDirection direction;
+
     private Double amount;
+
     private String notes;
+
+    @Enumerated(EnumType.STRING)
+    private CurrencyType currency;
 }

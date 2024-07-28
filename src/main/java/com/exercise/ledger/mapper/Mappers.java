@@ -47,16 +47,19 @@ public class Mappers {
                 .type(transactionDTO.getType())
                 .direction(transactionDTO.getDirection())
                 .amount(transactionDTO.getAmount())
+                .currency(transactionDTO.getCurrency())
                 .build();
     }
 
     public static TransactionDTO mapToTransactionDTO(final Transaction transaction) {
         return TransactionDTO.builder()
                 .id(transaction.getId())
+                .customerId(transaction.getCustomerId())
                 .withCustomerId(transaction.getWithCustomerId())
                 .type(transaction.getType())
                 .direction(transaction.getDirection())
                 .amount(transaction.getAmount())
+                .currency(transaction.getCurrency())
                 .build();
     }
 }

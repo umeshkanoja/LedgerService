@@ -2,6 +2,7 @@ package com.exercise.ledger.core.customer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.exercise.ledger.core.account.Account;
 import com.exercise.ledger.core.transaction.Transaction;
@@ -27,18 +28,28 @@ import lombok.ToString;
 @ToString
 @Builder
 public class Customer {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
     private String userName;
+
     private String email;
+
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Account> accounts;
+
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Transaction> transactions;
 
     public void addAccount(Account account) {
         accounts.add(account);
         account.setCustomer(this);
+    }
+
+    public void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
+        transaction.setCustomer(this);
     }
 }
