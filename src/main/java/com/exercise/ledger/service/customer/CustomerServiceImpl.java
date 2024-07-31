@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.exercise.ledger.core.account.CurrencyType;
 import com.exercise.ledger.core.customer.Customer;
+import com.exercise.ledger.exception.customer.FieldAlreadyTakenException;
 import com.exercise.ledger.repository.customer.CustomerRepoAccessor;
 import com.exercise.ledger.service.account.AccountService;
 
@@ -25,9 +26,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public Customer addCustomer(Customer customer) {
+    public Customer createCustomer(Customer customer) {
+        validateCustomerObject(customer);
         Customer newCustomer = customerRepoAccessor.save(customer);
-        addAccounts(newCustomer);
+        createAccounts(newCustomer);
         newCustomer = customerRepoAccessor.save(newCustomer);
         log.info("New customer created: {}", newCustomer);
         return newCustomer;
@@ -40,9 +42,19 @@ public class CustomerServiceImpl implements CustomerService {
         return customer;
     }
 
-    private void addAccounts(Customer customer) {
+    private void createAccounts(Customer customer) {
         for (CurrencyType currency : CurrencyType.values()) {
             customer.addAccount(accountService.createAccount(currency));
+        }
+    }
+
+    private void validateCustomerObject(final Customer customer) {
+        if (customerRepoAccessor.isEmailRegistered(customer.getEmail())) {
+            throw new FieldAlreadyTakenException("Email already registered");
+        }
+
+        if (customerRepoAccessor.isUserNameRegistered(customer.getUserName())) {
+            throw new FieldAlreadyTakenException("UserName already registered");
         }
     }
 }

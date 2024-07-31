@@ -3,10 +3,12 @@ package com.exercise.ledger.core.transaction;
 import java.util.UUID;
 
 import com.exercise.ledger.core.account.CurrencyType;
+import com.exercise.ledger.core.common.Audit;
 import com.exercise.ledger.core.customer.Customer;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -33,7 +35,9 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID transactionId;
+
+    private UUID transactionNumber;
 
     @Column(name = "customer_id", updatable = false, insertable = false)
     private UUID customerId;
@@ -54,8 +58,9 @@ public class Transaction {
 
     private Double amount;
 
-    private String notes;
-
     @Enumerated(EnumType.STRING)
     private CurrencyType currency;
+
+    @Embedded
+    private Audit audit;
 }

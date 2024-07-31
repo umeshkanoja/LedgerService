@@ -51,7 +51,7 @@ public class CustomerController {
         // Setting id to 0 for generating newId during saving in DB
         log.info("Request body customer object: {}", customerDTO);
         Customer customer = Mappers.mapToCustomer(customerDTO);
-        Customer createCustomer = customerService.addCustomer(customer);
+        Customer createCustomer = customerService.createCustomer(customer);
         return Mappers.mapToCustomerDTO(createCustomer);
     }
 

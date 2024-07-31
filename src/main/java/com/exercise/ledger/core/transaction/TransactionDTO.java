@@ -17,7 +17,7 @@ import lombok.ToString;
 @ToString
 public class TransactionDTO {
 
-    private UUID id;
+    private UUID transactionNumber;
 
     private UUID customerId;
 

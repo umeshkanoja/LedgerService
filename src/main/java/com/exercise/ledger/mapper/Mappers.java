@@ -41,7 +41,7 @@ public class Mappers {
 
     public static Transaction mapToTransaction(final TransactionDTO transactionDTO) {
         return Transaction.builder()
-                .id(transactionDTO.getId())
+                .transactionNumber(transactionDTO.getTransactionNumber())
                 .customerId(transactionDTO.getCustomerId())
                 .withCustomerId(transactionDTO.getWithCustomerId())
                 .type(transactionDTO.getType())
@@ -53,7 +53,7 @@ public class Mappers {
 
     public static TransactionDTO mapToTransactionDTO(final Transaction transaction) {
         return TransactionDTO.builder()
-                .id(transaction.getId())
+                .transactionNumber(transaction.getTransactionNumber())
                 .customerId(transaction.getCustomerId())
                 .withCustomerId(transaction.getWithCustomerId())
                 .type(transaction.getType())
