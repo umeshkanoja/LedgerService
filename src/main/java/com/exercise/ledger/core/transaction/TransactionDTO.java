@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.exercise.ledger.core.account.CurrencyType;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
@@ -34,4 +35,9 @@ public class TransactionDTO {
 
     @NotNull(message = "Currency is required")
     private CurrencyType currency;
+
+    @AssertTrue(message = "WithCustomerId is required when tranaction type is TRANSFER")
+    private boolean iswithCustomerId() {
+        return type != TransactionType.TRANSFER || withCustomerId != null;
+    }
 }

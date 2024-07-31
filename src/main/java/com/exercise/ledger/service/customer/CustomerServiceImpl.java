@@ -26,29 +26,30 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public Customer createCustomer(Customer customer) {
+    public Customer createCustomer(final Customer customer) {
         validateCustomerObject(customer);
         Customer newCustomer = customerRepoAccessor.save(customer);
         createAccounts(newCustomer);
         newCustomer = customerRepoAccessor.save(newCustomer);
-        log.info("New customer created: {}", newCustomer);
+        log.info("New customer created and accounts linked to it");
         return newCustomer;
     }
 
     @Override
     public Customer getCustomer(final UUID customerId) {
-        Customer customer = customerRepoAccessor.findById(customerId);
-
-        return customer;
+        log.info("Get customer record for customerId {}", customerId);
+        return customerRepoAccessor.findById(customerId);
     }
 
-    private void createAccounts(Customer customer) {
+    private void createAccounts(final Customer customer) {
+        log.info("Creating accounts for customer {}", customer);
         for (CurrencyType currency : CurrencyType.values()) {
             customer.addAccount(accountService.createAccount(currency));
         }
     }
 
     private void validateCustomerObject(final Customer customer) {
+        log.info("Validating customer object {}", customer);
         if (customerRepoAccessor.isEmailRegistered(customer.getEmail())) {
             throw new FieldAlreadyTakenException("Email already registered");
         }

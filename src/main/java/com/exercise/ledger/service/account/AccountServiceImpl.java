@@ -20,27 +20,28 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AccountServiceImpl implements AccountService {
 
+    private static final Double INITIAL_ACCOUNT_BALANCE = 0.0;
+
     private final AccountRepoAccessor accountRepoAccessor;
 
     private final CustomerRepoAccessor customerRepoAccessor;
 
     @Override
     public List<Account> getAllAccounts(final UUID customerId) {
+        log.info("Getting all accounts of customer {}", customerId);
         Customer customer = customerRepoAccessor.findById(customerId);
-        List<Account> accounts = accountRepoAccessor.findByCustomer(customer);
-        log.info("Accounts of user {}: \n {}", customerId, accounts);
-        return accounts;
+
+        return accountRepoAccessor.findByCustomer(customer);
     }
 
     @Override
     public Account createAccount(final CurrencyType currency) {
+        log.info("Creating account for currency {} with account balance {}", currency, INITIAL_ACCOUNT_BALANCE);
         Account account = Account.builder()
-                .balance(0.0)
+                .balance(INITIAL_ACCOUNT_BALANCE)
                 .currency(currency)
                 .build();
 
-        Account createdAccount = accountRepoAccessor.save(account);
-        log.info("New account created {}", createdAccount);
-        return createdAccount;
+        return accountRepoAccessor.save(account);
     }
 }

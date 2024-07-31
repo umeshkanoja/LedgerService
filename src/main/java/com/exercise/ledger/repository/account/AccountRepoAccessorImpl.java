@@ -20,17 +20,23 @@ public class AccountRepoAccessorImpl implements AccountRepoAccessor {
     private final AccountRepository accountRepository;
 
     @Override
-    public Account save(Account account) {
-        return accountRepository.save(account);
+    public Account save(final Account account) {
+        log.info("Creating account {}", account);
+        Account createdAccount = accountRepository.save(account);
+
+        log.info("Account record after creation: {}", createdAccount);
+        return createdAccount;
     }
 
     @Override
-    public List<Account> findByCustomer(Customer customer) {
+    public List<Account> findByCustomer(final Customer customer) {
+        log.info("Accessing accounts of customer {}", customer);
         List<Account> accounts = accountRepository.findByCustomer(customer);
         if (accounts.isEmpty()) {
             throw new AccountsNotFoundException(String.format("No accounts found for customer %s", customer.getId()));
         }
 
+        log.info("Records of customerId {}: {}", customer.getId(), accounts);
         return accounts;
     }
 }

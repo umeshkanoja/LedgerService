@@ -16,8 +16,10 @@ import com.exercise.ledger.repository.transaction.TransactionRepoAccessor;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class TransactionServiceImpl implements TransactionService {
 
@@ -28,11 +30,17 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public Transaction createTransaction(final Transaction transaction) {
+        log.info("Proccessing started for tranaction {}", transaction);
         Customer customer = customerRepoAccessor.findById(transaction.getCustomerId());
         final UUID transactionNumber = UUID.randomUUID();
+        log.info("Generated Transaction number is {}", transactionNumber);
+        log.info("Updating customer account balance");
         if (transaction.getType() == TransactionType.DEPOSIT) {
-            Account account = customer.getAccounts().stream().filter(x -> x.getCurrency() == transaction.getCurrency())
-                    .findFirst().get();
+            Account account = customer.getAccounts()
+                    .stream()
+                    .filter(x -> x.getCurrency() == transaction.getCurrency())
+                    .findFirst()
+                    .get();
 
             account.setBalance(account.getBalance() + transaction.getAmount());
         } else {
@@ -60,10 +68,12 @@ public class TransactionServiceImpl implements TransactionService {
                     .save(buildReceiverTransaction(customerTransaction, transactionNumber));
             receiverCustomer.addTransaction(receiverTransaction);
             customerRepoAccessor.save(receiverCustomer);
+            log.info("Transaction {} added for receiver customer {}", receiverTransaction, receiverCustomer);
         }
 
         customer.addTransaction(customerTransaction);
         customerRepoAccessor.save(customer);
+        log.info("Transaction {} added for customer {}", customerTransaction, customer);
         return customerTransaction;
     }
 

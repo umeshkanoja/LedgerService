@@ -35,30 +35,35 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    // Excluding userName from toString to avoid logging personal data.
+    @ToString.Exclude
     @Column(unique = true, nullable = false)
     private String userName;
 
+    // Excluding email from toString to avoid logging personal data.
+    @ToString.Exclude
     @Column(unique = true, nullable = false)
     private String email;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Account> accounts;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Transaction> transactions;
 
     @Embedded
+    @ToString.Exclude
     private Audit audit;
 
-    public Account addAccount(Account account) {
+    public void addAccount(Account account) {
         accounts.add(account);
         account.setCustomer(this);
-        return account;
     }
 
-    public Transaction addTransaction(Transaction transaction) {
+    public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
         transaction.setCustomer(this);
-        return transaction;
     }
 }

@@ -51,5 +51,6 @@ public class Account {
     private CurrencyType currency;
 
     @Embedded
+    @ToString.Exclude
     private Audit audit;
 }

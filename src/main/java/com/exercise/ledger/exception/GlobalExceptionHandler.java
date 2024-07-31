@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -36,6 +37,15 @@ public class GlobalExceptionHandler {
 
                 log.warn("Request validatin failed: {}", ex);
                 return buildErrorResponse(HttpStatus.BAD_REQUEST, errors, req);
+        }
+
+        @ExceptionHandler
+        public ResponseEntity<ErrorResponse<String>> invalidFormatExceptionHandler(
+                        HttpMessageNotReadableException ex,
+                        HttpServletRequest req) {
+
+                log.warn("Invalid format: ", ex);
+                return buildErrorResponse(HttpStatus.BAD_REQUEST, List.of(ex.getMessage()), req);
         }
 
         @ExceptionHandler

@@ -31,12 +31,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CustomerController {
+
     private final AccountService accountService;
     private final CustomerService customerService;
     private final TransactionService transactionService;
 
-    @GetMapping("/customers/{id}/accounts")
-    public List<AccountDTO> getAccounts(@PathVariable(value = "id") UUID customerId) {
+    @GetMapping("/customers/{customerId}/accounts")
+    public List<AccountDTO> getAccounts(@PathVariable UUID customerId) {
+        log.info("getAccounts request for customerId {}", customerId);
         List<Account> userAccounts = accountService.getAllAccounts(customerId);
         List<AccountDTO> accounts = userAccounts
                 .stream()
@@ -47,21 +49,26 @@ public class CustomerController {
     }
 
     @PostMapping("/customers")
-    public CustomerDTO postMethodName(@Valid @RequestBody CustomerDTO customerDTO) {
-        // Setting id to 0 for generating newId during saving in DB
-        log.info("Request body customer object: {}", customerDTO);
+    public CustomerDTO createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
+        log.info("createCustomer request object: {}", customerDTO);
         Customer customer = Mappers.mapToCustomer(customerDTO);
-        Customer createCustomer = customerService.createCustomer(customer);
-        return Mappers.mapToCustomerDTO(createCustomer);
+        log.info("Customer object after Mapping from DTO: {}", customer);
+        Customer createdCustomer = customerService.createCustomer(customer);
+        CustomerDTO createdCustomerDTO = Mappers.mapToCustomerDTO(createdCustomer);
+        log.info("Customer record returned {}", createdCustomerDTO);
+        return createdCustomerDTO;
     }
 
     @PostMapping("/customers/{customerId}/transaction")
     public TransactionDTO postMethodName(@Valid @RequestBody TransactionDTO transactionDTO,
             @PathVariable UUID customerId) {
+        log.info("Transaction request {} for customerId {}", transactionDTO, customerId);
         transactionDTO.setCustomerId(customerId);
         transactionDTO.setDirection(TransactionUtils.getDirection(transactionDTO.getType()));
-        log.info("transaction {} \n customerId {}", transactionDTO, customerId);
+        log.info("Transaction request after updates {}", transactionDTO, customerId);
         Transaction transaction = transactionService.createTransaction(Mappers.mapToTransaction(transactionDTO));
-        return Mappers.mapToTransactionDTO(transaction);
+        TransactionDTO createdTransactionDTO = Mappers.mapToTransactionDTO(transaction);
+        log.info("Transaction returned {}", createdTransactionDTO);
+        return createdTransactionDTO;
     }
 }

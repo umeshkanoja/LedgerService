@@ -24,10 +24,13 @@ public class CustomerDTO {
 
     @NotBlank(message = "The username is required.")
     @Size(min = 3, max = 20, message = "The username must be from 3 to 20 characters.")
+    @ToString.Exclude
     private String userName;
 
     @NotEmpty(message = "The email is required.")
     @Email(message = "The email is not a valid email.")
+    @ToString.Exclude
     private String email;
+
     private List<AccountDTO> accounts;
 }

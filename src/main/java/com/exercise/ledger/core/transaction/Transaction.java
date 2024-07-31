@@ -62,5 +62,6 @@ public class Transaction {
     private CurrencyType currency;
 
     @Embedded
+    @ToString.Exclude
     private Audit audit;
 }
