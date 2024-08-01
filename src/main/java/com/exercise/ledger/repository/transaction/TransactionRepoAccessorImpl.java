@@ -3,10 +3,10 @@ package com.exercise.ledger.repository.transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.exercise.ledger.core.transaction.Transaction;
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import com.exercise.ledger.core.transaction.Transaction;
 
 @Component
 @Slf4j
@@ -16,7 +16,7 @@ public class TransactionRepoAccessorImpl implements TransactionRepoAccessor {
     private final TransactionRepository transactionRepository;
 
     @Override
-    public Transaction save(Transaction transaction) {
+    public Transaction create(Transaction transaction) {
         log.info("Creating transaction {}", transaction);
         Transaction createdTransaction = transactionRepository.save(transaction);
 

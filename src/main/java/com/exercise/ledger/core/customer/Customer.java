@@ -1,12 +1,5 @@
 package com.exercise.ledger.core.customer;
 
-import java.util.List;
-import java.util.UUID;
-
-import com.exercise.ledger.core.account.Account;
-import com.exercise.ledger.core.common.Audit;
-import com.exercise.ledger.core.transaction.Transaction;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -15,12 +8,20 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import com.exercise.ledger.core.account.Account;
+import com.exercise.ledger.core.common.Audit;
+import com.exercise.ledger.core.transaction.Transaction;
+
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter

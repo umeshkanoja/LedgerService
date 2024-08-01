@@ -1,8 +1,8 @@
 package com.exercise.ledger.service.customer;
 
-import java.util.UUID;
-
 import com.exercise.ledger.core.customer.Customer;
+
+import java.util.UUID;
 
 public interface CustomerService {
 

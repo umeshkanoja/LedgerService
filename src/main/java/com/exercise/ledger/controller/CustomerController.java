@@ -1,9 +1,22 @@
 package com.exercise.ledger.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.exercise.ledger.core.account.Account;
 import com.exercise.ledger.core.account.AccountDTO;
+import com.exercise.ledger.core.account.CurrencyType;
 import com.exercise.ledger.core.customer.Customer;
 import com.exercise.ledger.core.customer.CustomerDTO;
 import com.exercise.ledger.core.transaction.Transaction;
@@ -14,18 +27,8 @@ import com.exercise.ledger.service.customer.CustomerService;
 import com.exercise.ledger.service.transaction.TransactionService;
 import com.exercise.ledger.utils.TransactionUtils;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.List;
 import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @Slf4j
@@ -37,9 +40,10 @@ public class CustomerController {
     private final TransactionService transactionService;
 
     @GetMapping("/customers/{customerId}/accounts")
-    public List<AccountDTO> getAccounts(@PathVariable UUID customerId) {
+    public List<AccountDTO> getAccounts(@PathVariable UUID customerId, @Nullable @RequestParam CurrencyType currency) {
         log.info("getAccounts request for customerId {}", customerId);
-        List<Account> userAccounts = accountService.getAllAccounts(customerId);
+        List<Account> userAccounts = currency == null ? accountService.getAllAccounts(customerId)
+                : accountService.getCurrencyAccounts(customerId, currency);
         List<AccountDTO> accounts = userAccounts
                 .stream()
                 .map(Mappers::mapToAccountDTO)
@@ -60,7 +64,7 @@ public class CustomerController {
     }
 
     @PostMapping("/customers/{customerId}/transaction")
-    public TransactionDTO postMethodName(@Valid @RequestBody TransactionDTO transactionDTO,
+    public TransactionDTO createTransaction(@Valid @RequestBody TransactionDTO transactionDTO,
             @PathVariable UUID customerId) {
         log.info("Transaction request {} for customerId {}", transactionDTO, customerId);
         transactionDTO.setCustomerId(customerId);

@@ -1,10 +1,10 @@
 package com.exercise.ledger.core.account;
 
-import java.util.UUID;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.util.UUID;
 
 @Getter
 @Builder

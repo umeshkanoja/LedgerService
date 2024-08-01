@@ -1,16 +1,17 @@
 package com.exercise.ledger.core.transaction;
 
-import java.util.UUID;
-
-import com.exercise.ledger.core.account.CurrencyType;
-
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import com.exercise.ledger.core.account.CurrencyType;
+
+import java.util.UUID;
 
 @Getter
 @Setter

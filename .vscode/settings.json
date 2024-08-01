@@ -1,0 +1,17 @@
+{
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.completion.importOrder": [
+    "",
+    "org.springframework",
+    "jakarta",
+    "lombok",
+    "com.exercise",
+    "javax",
+    "java",
+    "#"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  }
+}

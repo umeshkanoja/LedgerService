@@ -1,10 +1,10 @@
 package com.exercise.ledger.service.account;
 
-import java.util.List;
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.exercise.ledger.core.account.Account;
 import com.exercise.ledger.core.account.CurrencyType;
@@ -12,15 +12,13 @@ import com.exercise.ledger.core.customer.Customer;
 import com.exercise.ledger.repository.account.AccountRepoAccessor;
 import com.exercise.ledger.repository.customer.CustomerRepoAccessor;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AccountServiceImpl implements AccountService {
-
-    private static final Double INITIAL_ACCOUNT_BALANCE = 0.0;
 
     private final AccountRepoAccessor accountRepoAccessor;
 
@@ -35,13 +33,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account createAccount(final CurrencyType currency) {
-        log.info("Creating account for currency {} with account balance {}", currency, INITIAL_ACCOUNT_BALANCE);
-        Account account = Account.builder()
-                .balance(INITIAL_ACCOUNT_BALANCE)
-                .currency(currency)
-                .build();
+    public List<Account> getCurrencyAccounts(UUID customerId, CurrencyType currency) {
+        log.info("Getting currency {} accounts of customer {}", currency, customerId);
+        Customer customer = customerRepoAccessor.findById(customerId);
 
-        return accountRepoAccessor.save(account);
+        return accountRepoAccessor.findByCustomerAndCurrency(customer, currency);
     }
 }

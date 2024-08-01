@@ -1,6 +1,6 @@
 package com.exercise.ledger.mapper;
 
-import java.util.ArrayList;
+import lombok.experimental.UtilityClass;
 
 import com.exercise.ledger.core.account.Account;
 import com.exercise.ledger.core.account.AccountDTO;
@@ -9,7 +9,7 @@ import com.exercise.ledger.core.customer.CustomerDTO;
 import com.exercise.ledger.core.transaction.Transaction;
 import com.exercise.ledger.core.transaction.TransactionDTO;
 
-import lombok.experimental.UtilityClass;
+import java.util.ArrayList;
 
 @UtilityClass
 public class Mappers {

@@ -1,16 +1,16 @@
 package com.exercise.ledger.repository.customer;
 
-import java.util.Optional;
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.exercise.ledger.core.customer.Customer;
 import com.exercise.ledger.exception.customer.CustomerNotFoundException;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -32,7 +32,7 @@ public class CustomerRepoAccessorImpl implements CustomerRepoAccessor {
     }
 
     @Override
-    public Customer save(final Customer customer) {
+    public Customer create(final Customer customer) {
         log.info("Creating customer {}", customer);
         Customer createdCustomer = customerRepository.save(customer);
 

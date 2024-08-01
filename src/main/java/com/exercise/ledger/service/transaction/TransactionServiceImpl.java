@@ -1,9 +1,12 @@
 package com.exercise.ledger.service.transaction;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import jakarta.transaction.Transactional;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.exercise.ledger.core.account.Account;
 import com.exercise.ledger.core.customer.Customer;
@@ -14,9 +17,7 @@ import com.exercise.ledger.exception.transaction.InsufficientBalanceException;
 import com.exercise.ledger.repository.customer.CustomerRepoAccessor;
 import com.exercise.ledger.repository.transaction.TransactionRepoAccessor;
 
-import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -54,7 +55,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         transaction.setTransactionNumber(transactionNumber);
-        Transaction customerTransaction = transactionRepoAccessor.save(transaction);
+        Transaction customerTransaction = transactionRepoAccessor.create(transaction);
         if (transaction.getType() == TransactionType.TRANSFER) {
             Customer receiverCustomer = customerRepoAccessor.findById(transaction.getWithCustomerId());
             Account account = receiverCustomer.getAccounts()
@@ -65,14 +66,14 @@ public class TransactionServiceImpl implements TransactionService {
 
             account.setBalance(account.getBalance() + transaction.getAmount());
             Transaction receiverTransaction = transactionRepoAccessor
-                    .save(buildReceiverTransaction(customerTransaction, transactionNumber));
+                    .create(buildReceiverTransaction(customerTransaction, transactionNumber));
             receiverCustomer.addTransaction(receiverTransaction);
-            customerRepoAccessor.save(receiverCustomer);
+            customerRepoAccessor.create(receiverCustomer);
             log.info("Transaction {} added for receiver customer {}", receiverTransaction, receiverCustomer);
         }
 
         customer.addTransaction(customerTransaction);
-        customerRepoAccessor.save(customer);
+        customerRepoAccessor.create(customer);
         log.info("Transaction {} added for customer {}", customerTransaction, customer);
         return customerTransaction;
     }
