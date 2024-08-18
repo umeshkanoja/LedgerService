@@ -50,6 +50,10 @@ This POST API is responsible for creating 3 types of transactions, Withdraw, Dep
 
 1. Clean build: `./mvnw clean install`
 2. Run server: `./mvnw spring-boot:run`
+3. Run using docker:
+    1. cd to the folder of `Dockerfile`.
+    2. build docker image using: `docker build -t ledgerapi .`
+    3. run docker image: `docker run -p 8000:8080 ledgerapi`
 
 ### Getting started
 
