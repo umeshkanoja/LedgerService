@@ -73,38 +73,3 @@ This POST API is responsible for creating 3 types of transactions, Withdraw, Dep
     1. Note: These default records are added from `src\resources\import.sql` file
 1. To Test APIs, import requests located at `postman\LedgerPostmanRequests.json` in Postman app and start running it.
 1. To check unit test coverage, after build open `target\site\index.html` file.
-
-## Next steps
-
-### Production readiness
-
-For productionization, we should do following things:
-
-1. Add following metrics to monitor service.
-    1. Add status code metrics on all APIs (eg. 5xx, 4xx etc)
-    1. Add alarms on 5xx status code errors.
-    1. Add service health metrics, CPU utilization, memory utilization etc.
-1. Currency we are using H2 database, connect this service to different database service like MySQL or Postgres etc.
-    1. This can be done by adding dependency of database connector and by modifying `application.properties` file.
-    1. For example, for MySQL following changes should work.
-        ```
-        // pom.xml
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        ```
-        ```
-        // application.properties
-        spring.jpa.hibernate.ddl-auto=none 
-        spring.datasource.url = jdbc:mysql://localhost:3306/movie_example
-        spring.datasource.username = demo
-        spring.datasource.password = demo
-        ```
-
-### Next Features
-
-1. We can add `Get` request for `customers` to share all customer list to our client. We can add pagination to it considering list will be big.
-2. API to share transactions with customer. We can pagination here as well.
-3. For real world app, we will need to add `status` field in transaction to support async transactions with banks/financial institute. Values can be
-`pending`, `succeeded` and `failed`.
